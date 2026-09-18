@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jisha M — Full Stack Developer</title>
+<meta name="description" content="Jisha M · Full Stack Developer — Django, FastAPI, Vue.js, Azure Synapse & Applied AI. Kerala, India.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink:   '#0A0F14',
+        panel: '#0F1620',
+        deep:  '#0C1219',
+        line:  '#1E2B38',
+        lime:  '#B7F04A',
+        amber: '#FF8A3D',
+        mist:  '#8FA3B8',
+        fog:   '#C9D6E3',
+      },
+      fontFamily: {
+        display: ['Syne', 'sans-serif'],
+        body: ['"Instrument Sans"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      }
+    }
+  }
+}
+</script>
+
+<style>
+  :root { --acc:#B7F04A; --acc2:#FF8A3D; }
+  body { background:#0A0F14; }
+  ::selection { background:#B7F04A; color:#0A0F14; }
+  ::-webkit-scrollbar { width:9px; }
+  ::-webkit-scrollbar-track { background:#0A0F14; }
+  ::-webkit-scrollbar-thumb { background:#1E2B38; border-radius:0; }
+  ::-webkit-scrollbar-thumb:hover { background:#B7F04A; }
+
+  /* ---------- textures ---------- */
+  .noise {
+    position:fixed; inset:0; z-index:95; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(183,240,74,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(183,240,74,.045) 1px, transparent 1px);
+    background-size:46px 46px;
+    mask-image:radial-gradient(ellipse 90% 80% at 50% 20%, black 40%, transparent 100%);
+  }
+  .scanlines {
+    background:repeating-linear-gradient(0deg, rgba(10,15,20,.25) 0 1px, transparent 1px 4px);
+  }
+
+  /* ---------- portrait motion ---------- */
+  .kb img { animation:kenburns 16s ease-in-out infinite; }
+  @keyframes kenburns { 0%,100% { transform:scale(1) translateY(0); } 50% { transform:scale(1.07) translateY(-10px); } }
+  .float-chip { animation:floaty 6s ease-in-out infinite; }
+  @keyframes floaty { 0%,100% { transform:rotate(-4deg) translateY(0); } 50% { transform:rotate(-4deg) translateY(-8px); } }
+
+  /* ---------- reveals ---------- */
+  .reveal { opacity:0; transform:translateY(26px);
+    transition:opacity .8s cubic-bezier(.22,1,.36,1) var(--d,0s), transform .8s cubic-bezier(.22,1,.36,1) var(--d,0s); }
+  .reveal.in { opacity:1; transform:none; }
+  .mask-line { overflow:hidden; }
+  .mask-line > span { display:block; transform:translateY(115%);
+    transition:transform .9s cubic-bezier(.22,1,.36,1) var(--d,0s); }
+  .reveal.in .mask-line > span, .mask-line.in > span { transform:translateY(0); }
+
+  /* ---------- terminal ---------- */
+  .t-caret { display:inline-block; width:8px; height:15px; background:var(--acc);
+    vertical-align:-2px; margin-left:2px; animation:blink 1s steps(1) infinite; }
+  .t-out { opacity:0; transform:translateY(4px); transition:opacity .3s, transform .3s; }
+  .t-out.show { opacity:1; transform:none; }
+  @keyframes blink { 50% { opacity:0; } }
+
+  /* ---------- marquee ---------- */
+  .marquee-track { display:flex; width:max-content; animation:marquee 30s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state:paused; }
+  @keyframes marquee { to { transform:translateX(-50%); } }
+
+  /* ---------- rotator ---------- */
+  .rotor { display:inline-block; transition:opacity .25s, transform .25s; }
+  .rotor.out { opacity:0; transform:translateY(-10px); }
+
+  /* ---------- skill bars ---------- */
+  .bar { height:6px; background:#15212d; position:relative; overflow:hidden; }
+  .bar i { position:absolute; inset:0; width:0;
+    background:linear-gradient(90deg, var(--acc), #dcff8a);
+    transition:width 1.2s cubic-bezier(.22,1,.36,1) var(--d,0s); }
+  .bars.go .bar i { width:var(--lvl); }
+
+  /* ---------- bio app bars ---------- */
+  .pulsebar { transform-origin:bottom; animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform:scaleY(.35);} 50% { transform:scaleY(1);} }
+  .processing .pulsebar { animation-duration:.55s; }
+  .dot-blink { animation:blink 1.2s steps(1) infinite; }
+
+  /* ---------- misc ---------- */
+  .tilt { transition:transform .35s cubic-bezier(.22,1,.36,1); will-change:transform; }
+  .link-sweep { background-image:linear-gradient(var(--acc),var(--acc));
+    background-repeat:no-repeat; background-size:0% 3px; background-position:0 96%;
+    transition:background-size .5s cubic-bezier(.22,1,.36,1); }
+  .link-sweep:hover { background-size:100% 3px; }
+  .watermark { -webkit-text-stroke:1px rgba(183,240,74,.08); color:transparent; }
+  .corner { position:absolute; width:14px; height:14px; border-color:var(--acc); opacity:.7; z-index:5; }
+
+  .cursor-dot,.cursor-ring { position:fixed; top:0; left:0; pointer-events:none; z-index:130;
+    border-radius:9999px; transform:translate(-50%,-50%); }
+  .cursor-dot { width:6px; height:6px; background:var(--acc); }
+  .cursor-ring { width:34px; height:34px; border:1px solid rgba(183,240,74,.5);
+    transition:width .25s, height .25s, background .25s, border-color .25s; }
+  .cursor-ring.big { width:58px; height:58px; background:rgba(183,240,74,.08); border-color:rgba(183,240,74,.9); }
+  body.has-cursor, body.has-cursor a, body.has-cursor button { cursor:none; }
+
+  .pulse-dot { position:relative; }
+  .pulse-dot::after { content:''; position:absolute; inset:-4px; border-radius:9999px;
+    border:1px solid var(--acc); animation:ring 1.8s ease-out infinite; }
+  @keyframes ring { from { transform:scale(.6); opacity:1;} to { transform:scale(1.8); opacity:0;} }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important;
+      transition-duration:.01ms !important; }
+    .marquee-track { animation:none; }
+    .reveal, .mask-line > span { opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+
+<body class="bg-ink text-fog font-body antialiased overflow-x-hidden">
+
+<div class="noise"></div>
+<div id="progress" class="fixed top-0 left-0 h-[2px] bg-lime z-[110] w-0"></div>
+<div class="cursor-dot hidden" id="cDot"></div>
+<div class="cursor-ring hidden" id="cRing"></div>
+
+<!-- ================= NAV ================= -->
+<header class="fixed top-0 inset-x-0 z-[100] border-b border-line/70 bg-ink/85 backdrop-blur-md">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-3 font-mono text-sm tracking-tight">
+      <img src="./jisha-portrait.jpg.png" alt="Jisha M" class="w-8 h-8 rounded-full object-cover object-[50%_20%] border border-lime/60 hidden sm:block">
+      <span class="flex items-baseline gap-1">
+        <span class="text-lime font-bold">JM</span><span class="text-mist">.dev</span>
+      </span>
+      <span class="ml-1 hidden lg:inline text-[10px] text-mist/60 uppercase tracking-[0.25em]">full stack</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 font-mono text-[11px] uppercase tracking-[0.2em]">
+      <a data-nav href="#about"      class="text-mist hover:text-lime transition-colors">About</a>
+      <a data-nav href="#experience" class="text-mist hover:text-lime transition-colors">Experience</a>
+      <a data-nav href="#projects"   class="text-mist hover:text-lime transition-colors">Projects</a>
+      <a data-nav href="#skills"     class="text-mist hover:text-lime transition-colors">Skills</a>
+      <a data-nav href="#contact"    class="px-4 py-2 border border-lime/50 text-lime hover:bg-lime hover:text-ink transition-all">Hire&nbsp;Me</a>
+    </div>
+    <button id="burger" class="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5" aria-label="Menu">
+      <span class="b-line w-6 h-px bg-fog transition-transform"></span>
+      <span class="b-line w-6 h-px bg-fog transition-transform"></span>
+    </button>
+  </nav>
+  <div id="mobileMenu" class="md:hidden hidden border-t border-line bg-ink/95 backdrop-blur-md">
+    <div class="px-6 py-5 flex flex-col gap-4 font-mono text-xs uppercase tracking-[0.2em]">
+      <a data-nav href="#about" class="text-mist hover:text-lime">About</a>
+      <a data-nav href="#experience" class="text-mist hover:text-lime">Experience</a>
+      <a data-nav href="#projects" class="text-mist hover:text-lime">Projects</a>
+      <a data-nav href="#skills" class="text-mist hover:text-lime">Skills</a>
+      <a data-nav href="#contact" class="text-lime">Hire Me ↗</a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="top" class="relative min-h-screen flex flex-col justify-center overflow-hidden pt-28 pb-16">
+  <div class="absolute inset-0 grid-bg"></div>
+  <div id="glow" class="absolute w-[560px] h-[560px] rounded-full pointer-events-none opacity-70"
+       style="background:radial-gradient(circle, rgba(183,240,74,.09), transparent 65%); top:10%; left:55%;"></div>
+  <div class="absolute -bottom-32 -left-32 w-96 h-96 rounded-full pointer-events-none"
+       style="background:radial-gradient(circle, rgba(255,138,61,.07), transparent 65%);"></div>
+
+  <div class="relative max-w-6xl mx-auto px-6 w-full grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
+    <!-- left -->
+    <div>
+      <div class="flex flex-wrap items-center gap-4 font-mono text-[11px] uppercase tracking-[0.25em] text-mist reveal">
+        <span class="flex items-center gap-2 text-lime">
+          <span class="pulse-dot w-2 h-2 rounded-full bg-lime inline-block"></span> open to work
+        </span>
+        <span class="w-8 h-px bg-line"></span>
+        <span>Kerala, India · UTC+5:30</span>
+      </div>
+
+      <h1 class="font-display leading-[0.92] mt-6 text-[clamp(3.6rem,11vw,8.5rem)] font-extrabold tracking-tight uppercase">
+        <span id="nm1" data-text="JISHA" class="block text-fog">JISHA</span>
+        <span id="nm2" data-text="M." class="block text-transparent" style="-webkit-text-stroke:2px #B7F04A;">M.</span>
+      </h1>
+
+      <p class="mt-6 text-lg md:text-xl text-mist max-w-md reveal" style="--d:.2s">
+        Full Stack Developer building with
+        <span class="text-fog font-semibold"><span id="rotor" class="rotor text-lime">Django</span></span>
+        — APIs, integrations, data pipelines &amp; applied AI.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-5 reveal" style="--d:.35s">
+        <a href="#projects" class="group font-mono text-xs uppercase tracking-[0.2em] bg-lime text-ink px-6 py-3.5 hover:bg-amber transition-colors duration-300">
+          View Work <span class="inline-block transition-transform group-hover:translate-x-1.5">→</span>
+        </a>
+        <a href="#experience" class="font-mono text-xs uppercase tracking-[0.2em] border border-line px-6 py-3.5 text-mist hover:border-lime hover:text-lime transition-colors">
+          Career Log
+        </a>
+      </div>
+
+      <div class="mt-12 flex gap-10 reveal" style="--d:.5s">
+        <div><div class="font-display text-3xl font-bold text-fog"><span class="stat-num" data-count="2" data-suffix="+">0</span></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-mist mt-1">yrs shipping code</div></div>
+        <div><div class="font-display text-3xl font-bold text-fog"><span class="stat-num" data-count="4">0</span></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-mist mt-1">roles @ cloudium</div></div>
+        <div><div class="font-display text-3xl font-bold text-fog"><span class="stat-num" data-count="4">0</span></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-mist mt-1">certifications</div></div>
+      </div>
+    </div>
+
+    <!-- right : portrait -->
+    <div class="relative reveal" style="--d:.25s">
+      <div class="absolute -inset-2 border border-lime/25 translate-x-5 translate-y-5 pointer-events-none"></div>
+      <span class="corner border-t border-l left-[-8px] top-[-8px]"></span>
+      <span class="corner border-b border-r border-lime right-[-8px] bottom-[-8px]"></span>
+
+      <div class="float-chip absolute -left-4 md:-left-8 top-8 z-10 bg-lime text-ink font-mono text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-2 shadow-[0_10px_30px_-8px_rgba(183,240,74,.5)]">
+        open to work ✦
+      </div>
+
+      <div data-tilt class="tilt relative overflow-hidden border border-line bg-panel shadow-[0_30px_80px_-20px_rgba(0,0,0,.75)]">
+        <div class="kb overflow-hidden">
+          <img src="./jisha-portrait.jpg.png" alt="Jisha M — Full Stack Developer"
+               class="w-full h-[440px] md:h-[540px] object-cover object-[50%_18%] grayscale-[35%] contrast-[1.05] transition-[filter] duration-700 hover:grayscale-0">
+        </div>
+        <div class="scanlines absolute inset-0 pointer-events-none opacity-60"></div>
+        <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg, transparent 55%, rgba(10,15,20,.92))"></div>
+        <div class="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between">
+          <div>
+            <div class="font-mono text-[10px] text-lime tracking-[0.3em] uppercase">// portrait</div>
+            <div class="font-display font-bold text-fog text-lg leading-tight">Jisha M</div>
+            <div class="font-mono text-[10px] text-mist mt-0.5">full stack developer</div>
+          </div>
+          <div class="font-mono text-[10px] text-mist text-right leading-relaxed">
+            Kerala, IN<br>UTC+5:30
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#console" class="absolute bottom-5 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.3em] text-mist hover:text-lime transition-colors flex items-center gap-2">
+    scroll <span class="inline-block animate-bounce">↓</span>
+  </a>
+</section>
+
+<!-- ================= CONSOLE BAND ================= -->
+<section id="console" class="relative z-10 py-16 bg-deep/70 border-y border-line/60">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-mist mb-4 reveal">
+      <span class="text-lime">// live console</span>
+      <span>zsh — jisha@dev</span>
+    </div>
+    <div class="relative reveal" style="--d:.1s">
+      <span class="corner border-t border-l left-[-6px] top-[-6px]"></span>
+      <span class="corner border-b border-r border-lime right-[-6px] bottom-[-6px]"></span>
+      <div data-tilt class="tilt bg-deep border border-line shadow-[0_30px_80px_-20px_rgba(0,0,0,.7)]">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-line bg-panel">
+          <span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#febc2e]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#28c840]"></span>
+          <span class="ml-3 font-mono text-[11px] text-mist tracking-wide">jisha@dev — zsh</span>
+        </div>
+        <div id="termBody" class="p-5 font-mono text-[13px] leading-relaxed min-h-[300px]"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee border-b border-line bg-panel/60 py-4 overflow-hidden relative z-10">
+  <div class="marquee-track font-display font-bold uppercase tracking-wide text-sm md:text-base">
+    <div class="flex items-center shrink-0">
+      <span class="px-6 text-fog">Python</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Django</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">FastAPI</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Vue.js</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">React</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Azure Synapse</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">Generative AI</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Agentic AI</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">PostgreSQL</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">REST APIs</span><span class="text-amber">✦</span>
+    </div>
+    <div class="flex items-center shrink-0" aria-hidden="true">
+      <span class="px-6 text-fog">Python</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Django</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">FastAPI</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Vue.js</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">React</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Azure Synapse</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">Generative AI</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">Agentic AI</span><span class="text-amber">✦</span>
+      <span class="px-6 text-fog">PostgreSQL</span><span class="text-lime">✦</span>
+      <span class="px-6 text-mist">REST APIs</span><span class="text-amber">✦</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="py-28 scroll-mt-20">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-[200px_1fr] gap-10">
+    <div class="reveal">
+      <div class="md:sticky md:top-28">
+        <span class="font-mono text-lime text-sm">01</span>
+        <h2 class="font-display font-bold uppercase text-2xl tracking-tight mt-1 mask-line"><span>About</span></h2>
+        <div class="w-10 h-px bg-lime mt-4"></div>
+      </div>
+    </div>
+    <div>
+      <p class="text-2xl md:text-[2rem] leading-snug font-medium reveal">
+        I build <span class="text-lime">production-grade backends</span>, clean
+        <span class="text-lime">frontends</span>, and move <span class="text-amber">serious amounts of data</span> —
+        then wire a little <span class="text-amber">AI</span> into the mix.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-8 mt-10 text-mist leading-relaxed">
+        <p class="reveal" style="--d:.1s">
+          Over 2 years of industry experience across the full stack — designing RESTful APIs, integrating
+          third-party platforms like <span class="text-fog">Iterable</span> and <span class="text-fog">Paragon SDK</span>,
+          and executing large-scale data migrations on <span class="text-fog">Azure Synapse</span>.
+        </p>
+        <p class="reveal" style="--d:.2s">
+          I care about query performance, reliable validation, and interfaces people actually enjoy using.
+          Currently deepening my work in <span class="text-fog">Generative AI</span> and
+          <span class="text-fog">Agentic AI</span> systems — and always shipping.
+        </p>
+      </div>
+      <div class="mt-10 flex flex-wrap gap-3 reveal" style="--d:.3s">
+        <span class="font-mono text-[11px] uppercase tracking-[0.15em] px-3 py-1.5 border border-line text-mist hover:border-lime hover:text-lime transition-colors">Backend-first mindset</span>
+        <span class="font-mono text-[11px] uppercase tracking-[0.15em] px-3 py-1.5 border border-line text-mist hover:border-lime hover:text-lime transition-colors">API design</span>
+        <span class="font-mono text-[11px] uppercase tracking-[0.15em] px-3 py-1.5 border border-line text-mist hover:border-lime hover:text-lime transition-colors">Data migration</span>
+        <span class="font-mono text-[11px] uppercase tracking-[0.15em] px-3 py-1.5 border border-line text-mist hover:border-lime hover:text-lime transition-colors">Applied AI</span>
+        <span class="font-mono text-[11px] uppercase tracking-[0.15em] px-3 py-1.5 border border-line text-mist hover:border-lime hover:text-lime transition-colors">Performance tuning</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience" class="py-28 border-t border-line bg-deep/50 scroll-mt-20">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-[280px_1fr] gap-12">
+      <div class="reveal">
+        <div class="md:sticky md:top-28">
+          <span class="font-mono text-lime text-sm">02</span>
+          <h2 class="font-display font-bold uppercase text-3xl md:text-4xl tracking-tight mt-1 mask-line"><span>Experience</span></h2>
+          <p class="text-mist text-sm mt-5 leading-relaxed">
+            Two-plus years of continuous delivery at <span class="text-fog">Cloudium Software</span> —
+            promoted through four engineering roles, from trainee to Django developer and data-migration engineer.
+          </p>
+          <div class="mt-6 font-mono text-[11px] text-mist tracking-widest">2022 ─────▶ 2025</div>
+        </div>
+      </div>
+
+      <div class="relative border-l border-line pl-8 md:pl-12 space-y-10">
+
+        <article class="relative group reveal">
+          <span class="absolute -left-[41px] md:-left-[57px] top-2 w-4 h-4 bg-ink border-2 border-lime rotate-45 group-hover:bg-lime transition-colors"></span>
+          <div class="bg-panel border border-line p-6 md:p-8 transition-all duration-300 group-hover:border-lime/60 group-hover:-translate-y-1 group-hover:shadow-[0_18px_50px_-18px_rgba(183,240,74,.25)]">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <h3 class="font-display font-bold text-xl md:text-2xl text-fog">Python Django Developer</h3>
+              <span class="font-mono text-[11px] text-lime tracking-widest">JAN 2024 — JAN 2025</span>
+            </div>
+            <div class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist mt-1">Cloudium Software</div>
+            <ul class="mt-5 space-y-2.5 text-mist text-[15px]">
+              <li class="flex gap-3"><span class="text-lime mt-0.5">▸</span>Developed and integrated API solutions with third-party tools such as Iterable and Paragon SDK.</li>
+              <li class="flex gap-3"><span class="text-lime mt-0.5">▸</span>Built user activity tracking and credit management systems.</li>
+              <li class="flex gap-3"><span class="text-lime mt-0.5">▸</span>Optimized database queries using Django ORM, improving application performance.</li>
+            </ul>
+            <div class="mt-5 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-wider">
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Django</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">REST APIs</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">ORM</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Iterable</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Paragon SDK</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative group reveal" style="--d:.08s">
+          <span class="absolute -left-[41px] md:-left-[57px] top-2 w-4 h-4 bg-ink border-2 border-amber rotate-45 group-hover:bg-amber transition-colors"></span>
+          <div class="bg-panel border border-line p-6 md:p-8 transition-all duration-300 group-hover:border-amber/60 group-hover:-translate-y-1 group-hover:shadow-[0_18px_50px_-18px_rgba(255,138,61,.25)]">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <h3 class="font-display font-bold text-xl md:text-2xl text-fog">SQL / Azure Synapse Data Migration Engineer</h3>
+              <span class="font-mono text-[11px] text-amber tracking-widest">SEP 2023 — DEC 2023</span>
+            </div>
+            <div class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist mt-1">Cloudium Software</div>
+            <ul class="mt-5 space-y-2.5 text-mist text-[15px]">
+              <li class="flex gap-3"><span class="text-amber mt-0.5">▸</span>Executed large-scale data migration projects using Azure Synapse and SQL.</li>
+              <li class="flex gap-3"><span class="text-amber mt-0.5">▸</span>Ensured data accuracy and consistency across systems during migration.</li>
+              <li class="flex gap-3"><span class="text-amber mt-0.5">▸</span>Designed optimized SQL queries and transformation strategies for efficient data processing.</li>
+            </ul>
+            <div class="mt-5 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-wider">
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Azure Synapse</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">SQL</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">ETL</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Data Migration</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative group reveal" style="--d:.16s">
+          <span class="absolute -left-[41px] md:-left-[57px] top-2 w-4 h-4 bg-ink border-2 border-lime rotate-45 group-hover:bg-lime transition-colors"></span>
+          <div class="bg-panel border border-line p-6 md:p-8 transition-all duration-300 group-hover:border-lime/60 group-hover:-translate-y-1 group-hover:shadow-[0_18px_50px_-18px_rgba(183,240,74,.25)]">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <h3 class="font-display font-bold text-xl md:text-2xl text-fog">FastAPI Developer</h3>
+              <span class="font-mono text-[11px] text-lime tracking-widest">MAR 2023 — AUG 2023</span>
+            </div>
+            <div class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist mt-1">Cloudium Software</div>
+            <ul class="mt-5 space-y-2.5 text-mist text-[15px]">
+              <li class="flex gap-3"><span class="text-lime mt-0.5">▸</span>Developed asynchronous APIs using FastAPI for high-performance backend services.</li>
+              <li class="flex gap-3"><span class="text-lime mt-0.5">▸</span>Designed RESTful endpoints and secure integrations for client applications.</li>
+              <li class="flex gap-3"><span class="text-lime mt-0.5">▸</span>Used Pydantic for data validation, improving API reliability and performance.</li>
+            </ul>
+            <div class="mt-5 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-wider">
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">FastAPI</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Pydantic</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Async Python</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">REST</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative group reveal" style="--d:.24s">
+          <span class="absolute -left-[41px] md:-left-[57px] top-2 w-4 h-4 bg-ink border-2 border-mist rotate-45 group-hover:bg-mist transition-colors"></span>
+          <div class="bg-panel border border-line p-6 md:p-8 transition-all duration-300 group-hover:border-mist/60 group-hover:-translate-y-1">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <h3 class="font-display font-bold text-xl md:text-2xl text-fog">Software Engineer Trainee</h3>
+              <span class="font-mono text-[11px] text-mist tracking-widest">NOV 2022 — FEB 2023</span>
+            </div>
+            <div class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist mt-1">Cloudium Software</div>
+            <ul class="mt-5 space-y-2.5 text-mist text-[15px]">
+              <li class="flex gap-3"><span class="text-mist mt-0.5">▸</span>Trained in Angular, Java, and modern web development practices.</li>
+              <li class="flex gap-3"><span class="text-mist mt-0.5">▸</span>Integrated frontend and backend systems for end-to-end application delivery.</li>
+              <li class="flex gap-3"><span class="text-mist mt-0.5">▸</span>Implemented authentication and security features across web applications.</li>
+            </ul>
+            <div class="mt-5 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-wider">
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Angular</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Java</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Auth</span>
+              <span class="px-2.5 py-1 bg-ink border border-line text-mist">Web Fundamentals</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECT ================= -->
+<section id="projects" class="py-28 border-t border-line scroll-mt-20">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-end gap-5 mb-14 reveal">
+      <span class="font-mono text-lime text-sm">03</span>
+      <h2 class="font-display font-bold uppercase text-3xl md:text-4xl tracking-tight mask-line"><span>Featured Project</span></h2>
+      <div class="flex-1 h-px bg-line mb-2"></div>
+    </div>
+
+    <div class="grid lg:grid-cols-[1.05fr_1fr] gap-12 items-center">
+      <div class="reveal">
+        <div class="font-mono text-[11px] uppercase tracking-[0.25em] text-amber">Python · Bioinformatics · Web App</div>
+        <h3 class="font-display font-extrabold uppercase text-3xl md:text-5xl tracking-tight mt-3 leading-tight">
+          Bioinformatics<br><span class="text-transparent" style="-webkit-text-stroke:1.5px #B7F04A;">Web Application</span>
+        </h3>
+        <p class="text-mist mt-6 leading-relaxed max-w-lg">
+          A web-based platform for biological data analysis — automated end-to-end, from raw sequence input
+          to visualized results. Backend processing runs on computational-biology algorithms written in Python,
+          wrapped in a responsive HTML/CSS interface.
+        </p>
+        <ul class="mt-7 space-y-3 text-[15px] text-mist">
+          <li class="flex gap-3"><span class="text-lime">01</span>Backend data processing with bioinformatics algorithms</li>
+          <li class="flex gap-3"><span class="text-lime">02</span>Responsive UI for efficient data input &amp; result visualization</li>
+          <li class="flex gap-3"><span class="text-lime">03</span>Automated analysis workflow — less manual effort, higher accuracy</li>
+          <li class="flex gap-3"><span class="text-lime">04</span>Fully developed &amp; deployed end-to-end</li>
+        </ul>
+        <div class="mt-8 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-wider">
+          <span class="px-3 py-1.5 border border-lime/40 text-lime">Python</span>
+          <span class="px-3 py-1.5 border border-line text-mist">Bioinformatics Algorithms</span>
+          <span class="px-3 py-1.5 border border-line text-mist">HTML / CSS</span>
+          <span class="px-3 py-1.5 border border-line text-mist">Data Visualization</span>
+        </div>
+      </div>
+
+      <div class="reveal" style="--d:.15s">
+        <div data-tilt class="tilt bg-deep border border-line shadow-[0_30px_80px_-20px_rgba(0,0,0,.7)]">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-line bg-panel">
+            <span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span>
+            <span class="w-3 h-3 rounded-full bg-[#febc2e]"></span>
+            <span class="w-3 h-3 rounded-full bg-[#28c840]"></span>
+            <span class="ml-3 font-mono text-[11px] text-mist">bioseq.lab / analyze</span>
+          </div>
+          <div id="bioApp" class="p-6 space-y-5">
+            <div class="flex gap-2">
+              <span class="font-mono text-[10px] px-2.5 py-1 bg-panel border border-line text-mist">sequence.fasta</span>
+              <span class="font-mono text-[10px] px-2.5 py-1 bg-panel border border-line text-mist">params.json</span>
+            </div>
+            <div class="h-10 bg-ink border border-line flex items-center px-3 font-mono text-xs text-mist">
+              &gt; input: protein_seq_214<span class="t-caret ml-1"></span>
+            </div>
+            <button id="runBtn" class="w-full py-3 bg-lime text-ink font-mono text-xs uppercase tracking-[0.25em] font-bold hover:bg-amber transition-colors">
+              ▸ Run Analysis
+            </button>
+            <div class="flex items-end gap-1.5 h-28 pt-2">
+              <div class="pulsebar flex-1 bg-lime/85" style="height:62%;animation-delay:0s"></div>
+              <div class="pulsebar flex-1 bg-lime/65" style="height:88%;animation-delay:.2s"></div>
+              <div class="pulsebar flex-1 bg-amber/80" style="height:45%;animation-delay:.4s"></div>
+              <div class="pulsebar flex-1 bg-lime/85" style="height:96%;animation-delay:.1s"></div>
+              <div class="pulsebar flex-1 bg-lime/55" style="height:70%;animation-delay:.5s"></div>
+              <div class="pulsebar flex-1 bg-amber/70" style="height:52%;animation-delay:.3s"></div>
+              <div class="pulsebar flex-1 bg-lime/75" style="height:80%;animation-delay:.15s"></div>
+              <div class="pulsebar flex-1 bg-lime/45" style="height:58%;animation-delay:.45s"></div>
+            </div>
+            <div class="flex items-center justify-between font-mono text-[10px] text-mist border-t border-line pt-3">
+              <span>accuracy <span class="text-lime">98.2%</span></span>
+              <span class="flex items-center gap-2"><span class="dot-blink w-1.5 h-1.5 rounded-full bg-amber inline-block"></span><span id="bioStatus">processing…</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills" class="py-28 border-t border-line bg-deep/50 scroll-mt-20">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-end gap-5 mb-14 reveal">
+      <span class="font-mono text-lime text-sm">04</span>
+      <h2 class="font-display font-bold uppercase text-3xl md:text-4xl tracking-tight mask-line"><span>Skill Matrix</span></h2>
+      <div class="flex-1 h-px bg-line mb-2"></div>
+    </div>
+
+    <div class="grid lg:grid-cols-[1.3fr_1fr] gap-12">
+      <div id="skillBars" class="bars space-y-7 reveal">
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-2"><span class="text-fog tracking-widest uppercase">Python</span><span class="text-lime">95%</span></div>
+          <div class="bar"><i style="--lvl:95%;--d:0s"></i></div>
+        </div>
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-2"><span class="text-fog tracking-widest uppercase">Django</span><span class="text-lime">92%</span></div>
+          <div class="bar"><i style="--lvl:92%;--d:.1s"></i></div>
+        </div>
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-2"><span class="text-fog tracking-widest uppercase">FastAPI</span><span class="text-lime">88%</span></div>
+          <div class="bar"><i style="--lvl:88%;--d:.2s"></i></div>
+        </div>
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-2"><span class="text-fog tracking-widest uppercase">JavaScript / Vue.js</span><span class="text-lime">84%</span></div>
+          <div class="bar"><i style="--lvl:84%;--d:.3s"></i></div>
+        </div>
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-2"><span class="text-fog tracking-widest uppercase">SQL / PostgreSQL</span><span class="text-lime">85%</span></div>
+          <div class="bar"><i style="--lvl:85%;--d:.4s"></i></div>
+        </div>
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-2"><span class="text-fog tracking-widest uppercase">Azure Synapse</span><span class="text-lime">80%</span></div>
+          <div class="bar"><i style="--lvl:80%;--d:.5s"></i></div>
+        </div>
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-2"><span class="text-fog tracking-widest uppercase">GenAI / Agentic AI</span><span class="text-lime">76%</span></div>
+          <div class="bar"><i style="--lvl:76%;--d:.6s"></i></div>
+        </div>
+      </div>
+
+      <div class="space-y-8 reveal" style="--d:.15s">
+        <div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-amber mb-4">// Languages</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">Python</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">JavaScript</span>
+          </div>
+        </div>
+        <div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-amber mb-4">// Frontend</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">HTML</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">CSS</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">Vue.js</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">React</span>
+          </div>
+        </div>
+        <div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-amber mb-4">// Backend &amp; Data</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">Django</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">FastAPI</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">ORM</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">MySQL</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">PostgreSQL</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">Azure Synapse</span>
+          </div>
+        </div>
+        <div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-amber mb-4">// AI &amp; Tools</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-panel border border-lime/40 text-lime text-sm hover:bg-lime hover:text-ink hover:-translate-y-0.5 transition-all">Generative AI</span>
+            <span class="px-3 py-1.5 bg-panel border border-lime/40 text-lime text-sm hover:bg-lime hover:text-ink hover:-translate-y-0.5 transition-all">Agentic AI</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">Git</span>
+            <span class="px-3 py-1.5 bg-panel border border-line text-fog text-sm hover:border-lime hover:text-lime hover:-translate-y-0.5 transition-all">Postman</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CREDENTIALS ================= -->
+<section id="credentials" class="py-28 border-t border-line scroll-mt-20">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-end gap-5 mb-14 reveal">
+      <span class="font-mono text-lime text-sm">05</span>
+      <h2 class="font-display font-bold uppercase text-3xl md:text-4xl tracking-tight mask-line"><span>Credentials</span></h2>
+      <div class="flex-1 h-px bg-line mb-2"></div>
+    </div>
+
+    <div class="grid lg:grid-cols-[1fr_360px] gap-12">
+      <div class="reveal">
+        <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-amber mb-5">// Certifications</div>
+        <div class="divide-y divide-line border-y border-line">
+          <div class="group flex items-center gap-6 py-5 px-2 hover:bg-panel hover:pl-5 transition-all duration-300">
+            <span class="font-display font-extrabold text-2xl text-line group-hover:text-lime transition-colors">01</span>
+            <span class="flex-1 text-fog font-medium">Azure Synapse Analytics — Data Migration</span>
+            <span class="font-mono text-[10px] text-lime opacity-0 group-hover:opacity-100 transition-opacity">VERIFIED ✓</span>
+          </div>
+          <div class="group flex items-center gap-6 py-5 px-2 hover:bg-panel hover:pl-5 transition-all duration-300">
+            <span class="font-display font-extrabold text-2xl text-line group-hover:text-lime transition-colors">02</span>
+            <span class="flex-1 text-fog font-medium">Agentic AI</span>
+            <span class="font-mono text-[10px] text-lime opacity-0 group-hover:opacity-100 transition-opacity">VERIFIED ✓</span>
+          </div>
+          <div class="group flex items-center gap-6 py-5 px-2 hover:bg-panel hover:pl-5 transition-all duration-300">
+            <span class="font-display font-extrabold text-2xl text-line group-hover:text-lime transition-colors">03</span>
+            <span class="flex-1 text-fog font-medium">Generative AI</span>
+            <span class="font-mono text-[10px] text-lime opacity-0 group-hover:opacity-100 transition-opacity">VERIFIED ✓</span>
+          </div>
+          <div class="group flex items-center gap-6 py-5 px-2 hover:bg-panel hover:pl-5 transition-all duration-300">
+            <span class="font-display font-extrabold text-2xl text-line group-hover:text-lime transition-colors">04</span>
+            <span class="flex-1 text-fog font-medium">Python</span>
+            <span class="font-mono text-[10px] text-lime opacity-0 group-hover:opacity-100 transition-opacity">VERIFIED ✓</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="--d:.15s">
+        <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-amber mb-5">// Education</div>
+        <div class="space-y-5">
+          <div class="bg-panel border border-line p-6 hover:border-lime/60 hover:-translate-y-1 transition-all duration-300">
+            <div class="font-mono text-[11px] text-lime tracking-widest">2020 — 2022</div>
+            <div class="font-display font-bold text-lg text-fog mt-2">M.Sc. Electronics</div>
+            <div class="text-mist text-sm mt-1">Mananthavady Government College, Wayanad</div>
+          </div>
+          <div class="bg-panel border border-line p-6 hover:border-lime/60 hover:-translate-y-1 transition-all duration-300">
+            <div class="font-mono text-[11px] text-lime tracking-widest">2017 — 2020</div>
+            <div class="font-display font-bold text-lg text-fog mt-2">B.Sc. Electronics</div>
+            <div class="text-mist text-sm mt-1">Kannur University</div>
+          </div>
+          <p class="font-mono text-[11px] text-mist leading-relaxed border-l-2 border-amber pl-4">
+            Electronics → engineering: systems thinking, signals &amp; logic, now applied to software.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="relative py-32 border-t border-line overflow-hidden scroll-mt-20">
+  <div class="watermark absolute -bottom-10 right-0 font-display font-extrabold uppercase text-[24vw] leading-none pointer-events-none select-none">JISHA</div>
+  <div class="relative max-w-6xl mx-auto px-6">
+    <span class="font-mono text-lime text-sm reveal">06</span>
+    <h2 class="font-display font-extrabold uppercase tracking-tight leading-[0.95] mt-3 text-[clamp(2.6rem,7.5vw,5.5rem)] reveal" style="--d:.1s">
+      Let's build<br>something <span class="text-lime">real.</span>
+    </h2>
+    <p class="text-mist mt-6 max-w-md reveal" style="--d:.2s">
+      Open to full-stack developer roles — backend-heavy, API-first, or AI-flavoured. Kerala-based, remote-ready.
+    </p>
+
+    <div class="mt-12 reveal" style="--d:.3s">
+      <a href="mailto:jishavijayan214@gmail.com"
+         class="link-sweep inline-block font-display font-bold text-[clamp(1.1rem,3.4vw,2.2rem)] text-fog hover:text-lime transition-colors break-all">
+        jishavijayan214@gmail.com
+      </a>
+    </div>
+
+    <div class="mt-12 flex flex-wrap gap-4 reveal" style="--d:.4s">
+      <a href="tel:+919037336833" class="group font-mono text-xs uppercase tracking-[0.2em] border border-line px-6 py-3.5 text-mist hover:border-lime hover:text-lime transition-colors">
+        +91 90373 36833 <span class="inline-block transition-transform group-hover:translate-x-1">↗</span>
+      </a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noopener" class="group font-mono text-xs uppercase tracking-[0.2em] border border-line px-6 py-3.5 text-mist hover:border-lime hover:text-lime transition-colors">
+        LinkedIn <span class="inline-block transition-transform group-hover:translate-x-1">↗</span>
+      </a>
+      <a href="https://github.com" target="_blank" rel="noopener" class="group font-mono text-xs uppercase tracking-[0.2em] border border-line px-6 py-3.5 text-mist hover:border-lime hover:text-lime transition-colors">
+        GitHub <span class="inline-block transition-transform group-hover:translate-x-1">↗</span>
+      </a>
+      <button onclick="window.print()" class="group font-mono text-xs uppercase tracking-[0.2em] bg-lime text-ink px-6 py-3.5 hover:bg-amber transition-colors">
+        Download CV <span class="inline-block transition-transform group-hover:translate-x-1">↓</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="border-t border-line py-8">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-mist tracking-wider">
+    <span class="flex items-center gap-3">
+      <img src="jisha.jpg" alt="" class="w-6 h-6 rounded-full object-cover object-[50%_20%] border border-line">
+      © 2026 <span class="text-lime">Jisha M</span> · Kerala, India
+    </span>
+    <span>designed &amp; built with HTML · Tailwind · vanilla JS</span>
+    <a href="#top" class="hover:text-lime transition-colors">back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  /* ---------- progress bar ---------- */
+  const prog = document.getElementById('progress');
+  addEventListener('scroll', () => {
+    const h = document.documentElement;
+    prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  }, { passive: true });
+
+  /* ---------- mobile menu ---------- */
+  const burger = document.getElementById('burger'), menu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+    const open = !menu.classList.contains('hidden');
+    burger.children[0].style.transform = open ? 'translateY(3.5px) rotate(45deg)' : '';
+    burger.children[1].style.transform = open ? 'translateY(-3.5px) rotate(-45deg)' : '';
+  });
+  document.querySelectorAll('[data-nav]').forEach(a => a.addEventListener('click', () => {
+    menu.classList.add('hidden');
+    burger.children[0].style.transform = ''; burger.children[1].style.transform = '';
+  }));
+
+  /* ---------- active nav ---------- */
+  const navLinks = [...document.querySelectorAll('[data-nav]')];
+  document.querySelectorAll('section[id]').forEach(s =>
+    new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) navLinks.forEach(l => {
+        const on = l.getAttribute('href') === '#' + e.target.id;
+        l.classList.toggle('!text-lime', on);
+      });
+    }), { rootMargin: '-45% 0px -45% 0px' }).observe(s));
+
+  /* ---------- scramble ---------- */
+  const GLYPHS = '!<>-_/[]{}=+*^?#01';
+  function scramble(el, dur = 1000) {
+    const text = el.dataset.text || el.textContent;
+    if (REDUCED) { el.textContent = text; return; }
+    const t0 = performance.now();
+    (function tick(now) {
+      const p = Math.min(1, (now - t0) / dur);
+      const solved = Math.floor(p * text.length);
+      let out = '';
+      for (let i = 0; i < text.length; i++)
+        out += i < solved ? text[i] : (text[i] === ' ' ? ' ' : GLYPHS[Math.random() * GLYPHS.length | 0]);
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(tick); else el.textContent = text;
+    })(t0);
+  }
+  setTimeout(() => scramble(document.getElementById('nm1'), 1100), 250);
+  setTimeout(() => scramble(document.getElementById('nm2'), 800), 600);
+
+  /* ---------- reveals ---------- */
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: 0.15 });
+  document.querySelectorAll('.reveal, .mask-line').forEach(el => REDUCED ? el.classList.add('in') : io.observe(el));
+
+  /* ---------- counters ---------- */
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target, target = +el.dataset.count, suf = el.dataset.suffix || '';
+    cio.unobserve(el);
+    if (REDUCED) { el.textContent = target + suf; return; }
+    const t0 = performance.now();
+    (function t(now) {
+      const p = Math.min(1, (now - t0) / 1400), ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * ease) + suf;
+      if (p < 1) requestAnimationFrame(t);
+    })(t0);
+  }), { threshold: 0.6 });
+  document.querySelectorAll('.stat-num').forEach(el => cio.observe(el));
+
+  /* ---------- skill bars ---------- */
+  const bars = document.getElementById('skillBars');
+  new IntersectionObserver((es, o) => es.forEach(e => {
+    if (e.isIntersecting) { bars.classList.add('go'); o.unobserve(bars); }
+  }), { threshold: 0.3 }).observe(bars);
+
+  /* ---------- role rotator ---------- */
+  const rotor = document.getElementById('rotor');
+  const roles = ['Django', 'FastAPI', 'Vue.js', 'React', 'Azure Synapse', 'Generative AI'];
+  let ri = 0;
+  if (!REDUCED) setInterval(() => {
+    rotor.classList.add('out');
+    setTimeout(() => { ri = (ri + 1) % roles.length; rotor.textContent = roles[ri]; rotor.classList.remove('out'); }, 260);
+  }, 2300);
+
+  /* ---------- terminal ---------- */
+  const TERM = [
+    { cmd: 'whoami', out: ['jisha_m :: full-stack developer'] },
+    { cmd: 'cat stack.json', out: [
+      '{ "backend":  ["Django", "FastAPI"],',
+      '  "frontend": ["Vue.js", "React"],',
+      '  "data":     ["Azure Synapse", "PostgreSQL"] }'] },
+    { cmd: 'git log --oneline --career', out: [
+      'e4f21a7 feat: azure synapse data migration',
+      '9b30d2c feat: iterable & paragon sdk integrations',
+      '5a1cf9e feat: async fastapi services'] },
+    { cmd: './status.sh', out: [
+      '\u2714 2+ yrs shipping production code',
+      '\u2714 open to full-stack roles \u2014 kerala / remote'] },
+  ];
+  const termBody = document.getElementById('termBody');
+  const PROMPT = '<span class="text-lime">jisha@dev</span><span class="text-mist">:~$</span> ';
+  async function runTerminal() {
+    for (const step of TERM) {
+      const line = document.createElement('div');
+      line.innerHTML = PROMPT + '<span class="t-cmd"></span>';
+      termBody.appendChild(line);
+      const cmdEl = line.querySelector('.t-cmd');
+      if (REDUCED) { cmdEl.textContent = step.cmd; }
+      else {
+        const caret = document.createElement('span'); caret.className = 't-caret';
+        line.appendChild(caret);
+        for (const ch of step.cmd) { cmdEl.textContent += ch; await sleep(26 + Math.random() * 45); }
+        await sleep(240); caret.remove();
+      }
+      for (const o of step.out) {
+        const d = document.createElement('div');
+        d.className = 't-out text-mist pl-1'; d.textContent = o;
+        termBody.appendChild(d);
+        if (REDUCED) d.classList.add('show');
+        else { await sleep(60); d.classList.add('show'); await sleep(150); }
+      }
+      if (!REDUCED) await sleep(420);
+      const gap = document.createElement('div'); gap.className = 'h-2'; termBody.appendChild(gap);
+    }
+    const last = document.createElement('div');
+    last.innerHTML = PROMPT + '<span class="t-caret"></span>';
+    termBody.appendChild(last);
+  }
+  setTimeout(runTerminal, REDUCED ? 0 : 900);
+
+  /* ---------- tilt ---------- */
+  if (!REDUCED && matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        card.style.transform = `perspective(900px) rotateX(${-y * 4}deg) rotateY(${x * 5}deg)`;
+      });
+      card.addEventListener('mouseleave', () => card.style.transform = '');
+    });
+  }
+
+  /* ---------- hero glow ---------- */
+  const glow = document.getElementById('glow');
+  if (!REDUCED && matchMedia('(pointer:fine)').matches) {
+    let gx = innerWidth * .6, gy = innerHeight * .3, tx = gx, ty = gy;
+    addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
+    (function loop() {
+      gx += (tx - gx) * .06; gy += (ty - gy) * .06;
+      glow.style.left = (gx - 280) + 'px'; glow.style.top = (gy - 280) + 'px';
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ---------- bio app run button ---------- */
+  const bioApp = document.getElementById('bioApp'), runBtn = document.getElementById('runBtn'), bioStatus = document.getElementById('bioStatus');
+  runBtn.addEventListener('click', () => {
+    bioApp.classList.add('processing');
+    runBtn.textContent = '\u25B6 ANALYZING\u2026';
+    bioStatus.textContent = 'processing\u2026';
+    setTimeout(() => {
+      bioApp.classList.remove('processing');
+      runBtn.textContent = '\u2714 ANALYSIS COMPLETE';
+      bioStatus.textContent = 'done \u2014 0 errors';
+      setTimeout(() => runBtn.textContent = '\u25B8 Run Analysis', 2200);
+    }, 1600);
+  });
+
+  /* ---------- custom cursor ---------- */
+  if (!REDUCED && matchMedia('(pointer:fine)').matches) {
+    const dot = document.getElementById('cDot'), ring = document.getElementById('cRing');
+    dot.classList.remove('hidden'); ring.classList.remove('hidden');
+    document.body.classList.add('has-cursor');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+    (function loop() {
+      rx += (mx - rx) * .16; ry += (my - ry) * .16;
+      dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+      ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a, button, [data-tilt]').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('big'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+    });
+  }
+})();
+</script>
+</body>
+</html>
